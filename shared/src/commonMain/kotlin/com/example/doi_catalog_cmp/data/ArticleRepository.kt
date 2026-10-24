@@ -23,5 +23,6 @@ class ArticleRepository : IArticleRepository{
             article.title.lowercase().contains(q) ||
                     article.authors.any { author -> author.lowercase().contains(q) } ||
                     article.journal.lowercase().contains(q)
+        }
     }
 }
