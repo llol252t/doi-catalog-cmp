@@ -37,7 +37,6 @@ class ArticleListViewModel(
 
     fun search(query: String) {
         viewModelScope.launch {
-            _state.value = ArticleListState.Loading
             try {
                 val articles = repository.searchArticles(query)
                 if (articles.isEmpty()) {

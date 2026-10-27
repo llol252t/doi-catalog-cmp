@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,12 +19,19 @@ fun ArticleListScreen(
     onToggleTheme: () -> Unit,
     isDarkTheme: Boolean
 ) {
+    var searchText by remember { mutableStateOf("") }
+
+    LaunchedEffect(state) {
+        if (state is ArticleListState.Success && state.query != searchText) {
+            searchText = state.query
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Статьи") },
                 actions = {
-
                     TextButton(onClick = onToggleTheme) {
                         Text(if (isDarkTheme) "☀️" else "🌙")
                     }
@@ -38,8 +45,11 @@ fun ArticleListScreen(
                 .padding(paddingValues)
         ) {
             OutlinedTextField(
-                value = (state as? ArticleListState.Success)?.query ?: "",
-                onValueChange = onSearch,
+                value = searchText,
+                onValueChange = {
+                    searchText = it
+                    onSearch(it)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
