@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
@@ -23,6 +24,7 @@ import com.example.doi_catalog_cmp.presentation.list.detail.ArticleDetailViewMod
 import com.example.doi_catalog_cmp.presentation.list.ArticleListScreen
 import com.example.doi_catalog_cmp.presentation.list.ArticleListViewModel
 import kotlinx.serialization.modules.polymorphic
+import com.example.doi_catalog_cmp.ui.theme.AppTheme
 
 @Composable
 fun App() {
@@ -38,12 +40,13 @@ fun App() {
 
     // 2. Стек навигации
     val backStack = rememberNavBackStack(config, ArticleListRoute)
-    val isDarkTheme = false // Заглушка (потом сделаем AppTheme)
+    var isDarkTheme by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+
 
     // 3. Один репозиторий для всего приложения
     val repository = ArticleRepository()
 
-    MaterialTheme {
+    AppTheme(darkTheme = isDarkTheme) {
         Surface(
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
@@ -72,7 +75,7 @@ fun App() {
                                 backStack.add(ArticleDetailRoute(article.doi))
                             },
                             onSearch = viewModel::search,
-                            onToggleTheme = { /* TODO: будет позже */ },
+                            onToggleTheme = { isDarkTheme = !isDarkTheme },
                             isDarkTheme = isDarkTheme
                         )
                     }
