@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string name="app_title">Статьи</string>
+    <string name="search_hint">Поиск...</string>
+    <string name="nothing_found">Ничего не найдено</string>
+    <string name="article_not_found">Статья не найдена</string>
+    <string name="back_button">Назад</string>
+    <string name="article_label">Статья</string>
+</resources>
