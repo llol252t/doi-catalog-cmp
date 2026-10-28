@@ -30,7 +30,6 @@ import com.example.doi_catalog_cmp.ui.theme.AppTheme
 
 @Composable
 fun App() {
-    // 1. Конфиг для сериализации (обязательно для Desktop/Web/iOS)
     val config = androidx.savedstate.serialization.SavedStateConfiguration {
         serializersModule = kotlinx.serialization.modules.SerializersModule {
             polymorphic(androidx.navigation3.runtime.NavKey::class) {
@@ -40,13 +39,10 @@ fun App() {
         }
     }
 
-    // 2. Стек навигации
     val backStack = rememberNavBackStack(config, ArticleListRoute)
     var isDarkTheme by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
     var isRusLn by remember { mutableStateOf(true) }
 
-
-    // 3. Один репозиторий для всего приложения
     val repository = ArticleRepository()
 
     AppTheme(darkTheme = isDarkTheme) {
@@ -54,7 +50,7 @@ fun App() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            // 4. Навигация
+
             NavDisplay(
                 backStack = backStack,
                 onBack = { backStack.removeLastOrNull() },
@@ -64,7 +60,7 @@ fun App() {
                 },
                 entryProvider = entryProvider {
 
-                    // --- ЭКРАН СПИСКА ---
+
                     entry<ArticleListRoute> {
                         val viewModel: ArticleListViewModel = viewModel {
                             ArticleListViewModel(repository)
@@ -74,7 +70,6 @@ fun App() {
                         ArticleListScreen(
                             state = state,
                             onArticleClick = { article ->
-                                // Переход на деталь по клику
                                 backStack.add(ArticleDetailRoute(article.doi))
                             },
                             onSearch = viewModel::search,
@@ -85,14 +80,13 @@ fun App() {
                         )
                     }
 
-                    // --- ЭКРАН ДЕТАЛИ ---
+
                     entry<ArticleDetailRoute> { route ->
-                        // Создаем ViewModel для детали, привязывая её к конкретному doi
+
                         val viewModel: ArticleDetailViewModel = viewModel(key = route.doi) {
                             ArticleDetailViewModel(repository)
                         }
 
-                        // Грузим статью при открытии
                         LaunchedEffect(route.doi) {
                             viewModel.loadArticle(route.doi)
                         }
