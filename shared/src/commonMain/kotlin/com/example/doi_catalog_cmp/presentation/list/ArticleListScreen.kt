@@ -27,6 +27,8 @@ fun ArticleListScreen(
     onArticleClick: (ArticleModel) -> Unit,
     onSearch: (String) -> Unit,
     onToggleTheme: () -> Unit,
+    onToggleLn: () -> Unit,
+    isRusLn: Boolean,
     isDarkTheme: Boolean
 ) {
     var searchText by remember { mutableStateOf("") }
@@ -42,9 +44,13 @@ fun ArticleListScreen(
             TopAppBar(
                 title = { Text(stringResource(Res.string.app_title)) },
                 actions = {
+                    TextButton(onClick = onToggleLn) {
+                        Text(if (isRusLn) "RU" else "EN")
+                    }
                     TextButton(onClick = onToggleTheme) {
                         Text(if (isDarkTheme) "☀️" else "🌙")
                     }
+
                 }
             )
         }

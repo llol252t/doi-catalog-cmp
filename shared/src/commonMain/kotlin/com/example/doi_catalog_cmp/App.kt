@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -41,6 +43,7 @@ fun App() {
     // 2. Стек навигации
     val backStack = rememberNavBackStack(config, ArticleListRoute)
     var isDarkTheme by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    var isRusLn by remember { mutableStateOf(true) }
 
 
     // 3. Один репозиторий для всего приложения
@@ -76,6 +79,8 @@ fun App() {
                             },
                             onSearch = viewModel::search,
                             onToggleTheme = { isDarkTheme = !isDarkTheme },
+                            onToggleLn = {isRusLn = !isRusLn},
+                            isRusLn = isRusLn,
                             isDarkTheme = isDarkTheme
                         )
                     }
