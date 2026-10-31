@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -15,19 +16,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.doi_catalog_cmp.domain.ArticleModel
+import doi_catalog_cmp.shared.generated.resources.Res
+import doi_catalog_cmp.shared.generated.resources.article_label
+import doi_catalog_cmp.shared.generated.resources.article_not_found
+import doi_catalog_cmp.shared.generated.resources.back_button
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ArticleDetailScreen(
     state: ArticleDetailState,
-    onBack: () -> Unit
+    onBack: () -> Unit,
+    onRelatedArticleClick: (ArticleModel) -> Unit
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Статья") },
+                title = { Text(stringResource(Res.string.article_label)) },
                 navigationIcon = {
                     TextButton(onClick = onBack) {
-                        Text("← Назад")
+                        Text("← " + stringResource(Res.string.back_button))
                     }
                 }
             )
@@ -76,6 +84,15 @@ fun ArticleDetailScreen(
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
+
+                    if (article.journal.isNotEmpty()) {
+                        Button(
+                            onClick = { onRelatedArticleClick(article) },
+                            modifier = Modifier.padding(top = 24.dp)
+                        ) {
+                            Text("Связанные записи (${article.journal})")
+                        }
+                    }
                 }
             }
             is ArticleDetailState.NotFound -> {
@@ -83,7 +100,7 @@ fun ArticleDetailScreen(
                     modifier = Modifier.fillMaxSize().padding(paddingValues),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Статья не найдена")
+                    Text(stringResource(Res.string.article_not_found))
                 }
             }
         }

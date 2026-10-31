@@ -201,5 +201,14 @@ val mockArticles: List<ArticleModel> = listOf (
         journal = "2012 International Workshop on Metamaterials (Meta)",
         type = "proceedings-article",
         abstractText = ""
+    ) ,
+    ArticleModel(
+        doi = "10.1002/related.001",
+        title = "Связанная статья про стоматологию",
+        authors = listOf("John Doe"),
+        year = 2022,
+        journal = "Blackwell's Five-Minute Veterinary Consult Clinical Companion",
+        type = "journal-article",
+        abstractText = ""
     )
 )

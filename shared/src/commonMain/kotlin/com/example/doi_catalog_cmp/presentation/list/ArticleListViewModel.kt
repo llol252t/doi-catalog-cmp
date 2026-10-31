@@ -2,14 +2,14 @@ package com.example.doi_catalog_cmp.presentation.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.doi_catalog_cmp.domain.IArticleRepository
+import com.example.doi_catalog_cmp.domain.ArticleRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class ArticleListViewModel(
-    private val repository: IArticleRepository
+    private val repository: ArticleRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<ArticleListState>(ArticleListState.Loading)

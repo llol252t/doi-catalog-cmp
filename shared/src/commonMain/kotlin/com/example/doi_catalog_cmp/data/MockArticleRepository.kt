@@ -1,10 +1,10 @@
 package com.example.doi_catalog_cmp.data
 
 import com.example.doi_catalog_cmp.domain.ArticleModel
-import com.example.doi_catalog_cmp.domain.IArticleRepository
+import com.example.doi_catalog_cmp.domain.ArticleRepository
 import kotlinx.coroutines.delay
 
-class ArticleRepository : IArticleRepository{
+class MockArticleRepository : ArticleRepository {
     override suspend fun getArticleById(doi: String): ArticleModel? {
         delay(200)
         return mockArticles.find { it.doi == doi }
@@ -23,6 +23,11 @@ class ArticleRepository : IArticleRepository{
             article.title.lowercase().contains(q) ||
                     article.authors.any { author -> author.lowercase().contains(q) } ||
                     article.journal.lowercase().contains(q)
+        }
+    }
+    override suspend fun getRelatedArticle(journal: String, excludeDoi: String): ArticleModel? {
+        return mockArticles.firstOrNull {
+            it.journal == journal && it.doi != excludeDoi
         }
     }
 }
