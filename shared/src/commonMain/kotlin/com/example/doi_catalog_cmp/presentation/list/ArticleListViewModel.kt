@@ -3,21 +3,26 @@ package com.example.doi_catalog_cmp.presentation.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.doi_catalog_cmp.domain.ArticleRepository
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.cancellation.CancellationException
 
 class ArticleListViewModel(
     private val repository: ArticleRepository
 ) : ViewModel() {
 
+    private var searchJob: Job? = null
     private val _state = MutableStateFlow<ArticleListState>(ArticleListState.Loading)
     val state: StateFlow<ArticleListState> = _state.asStateFlow()
 
     init {
         loadArticles()
     }
+
+
 
     fun loadArticles() {
         viewModelScope.launch {
@@ -36,7 +41,8 @@ class ArticleListViewModel(
     }
 
     fun search(query: String) {
-        viewModelScope.launch {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
             try {
                 val articles = repository.searchArticles(query)
                 if (articles.isEmpty()) {
@@ -44,6 +50,8 @@ class ArticleListViewModel(
                 } else {
                     _state.value = ArticleListState.Success(articles, query)
                 }
+            } catch (e: CancellationException) {
+                    throw e
             } catch (e: Exception) {
                 _state.value = ArticleListState.NotFound
             }

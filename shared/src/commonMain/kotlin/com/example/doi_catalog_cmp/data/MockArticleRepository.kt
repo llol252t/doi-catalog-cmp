@@ -6,17 +6,14 @@ import kotlinx.coroutines.delay
 
 class MockArticleRepository : ArticleRepository {
     override suspend fun getArticleById(doi: String): ArticleModel? {
-        delay(200)
         return mockArticles.find { it.doi == doi }
     }
 
     override suspend fun getArticles(): List<ArticleModel> {
-        delay(300)
         return mockArticles
     }
 
     override suspend fun searchArticles(query: String): List<ArticleModel> {
-        delay(200)
         if (query.isBlank()) return mockArticles
         val q = query.lowercase()
         return mockArticles.filter { article ->
