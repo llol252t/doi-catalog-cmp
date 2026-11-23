@@ -2,8 +2,8 @@ package com.example.doi_catalog_cmp.presentation.list.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.doi_catalog_cmp.domain.ArticleModel
 import com.example.doi_catalog_cmp.domain.ArticleRepository
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,19 +24,17 @@ class ArticleDetailViewModel(
                 if (article == null) {
                     _state.value = ArticleDetailState.NotFound
                 } else {
-                    _state.value = ArticleDetailState.Success(article)
+                    val relatedDoi = if (article.journal.isNotEmpty()) {
+                        repository.getRelatedArticle(article.journal, article.doi)?.doi
+                    } else {
+                        null
+                    }
+                    _state.value = ArticleDetailState.Success(article, relatedDoi)
                 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
                 _state.value = ArticleDetailState.NotFound
-            }
-        }
-    }
-
-    fun onRelatedArticleClicked(currentArticle: ArticleModel, onNavigate: (String) -> Unit) {
-        viewModelScope.launch {
-            val related = repository.getRelatedArticle(currentArticle.journal, currentArticle.doi)
-            if (related != null) {
-                onNavigate(related.doi)
             }
         }
     }

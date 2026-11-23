@@ -6,32 +6,32 @@ plugins {
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
-    kotlin("plugin.serialization") version "2.0.0"
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
-//    listOf(
-//        iosArm64(),
-//        iosSimulatorArm64()
-//    ).forEach { iosTarget ->
-//        iosTarget.binaries.framework {
-//            baseName = "Shared"
-//            isStatic = true
-//        }
-//    }
-//
-//
-//
-//    js {
-//        browser()
-//        binaries.executable()
-//    }
-//
-//    @OptIn(ExperimentalWasmDsl::class)
-//    wasmJs {
-//        browser()
-//        binaries.executable()
-//    }
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = "Shared"
+            isStatic = true
+        }
+    }
+
+
+
+    js {
+        browser()
+        binaries.executable()
+    }
+
+    @OptIn(ExperimentalWasmDsl::class)
+    wasmJs {
+        browser()
+        binaries.executable()
+    }
     jvm()
     android {
        namespace = "com.example.doi_catalog_cmp.shared"
@@ -68,8 +68,8 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation("org.jetbrains.androidx.navigation3:navigation3-ui:1.1.1")
-            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+            implementation(libs.androidx.navigation3.ui)
+            implementation(libs.kotlinx.coroutinesCore)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

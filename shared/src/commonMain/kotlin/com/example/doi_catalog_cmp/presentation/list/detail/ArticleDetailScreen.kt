@@ -16,18 +16,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.doi_catalog_cmp.domain.ArticleModel
 import doi_catalog_cmp.shared.generated.resources.Res
 import doi_catalog_cmp.shared.generated.resources.article_label
 import doi_catalog_cmp.shared.generated.resources.article_not_found
 import doi_catalog_cmp.shared.generated.resources.back_button
+import doi_catalog_cmp.shared.generated.resources.related_articles
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ArticleDetailScreen(
     state: ArticleDetailState,
     onBack: () -> Unit,
-    onRelatedArticleClick: (ArticleModel) -> Unit
+    onRelatedArticleClick: (String) -> Unit
 ) {
     Scaffold(
         topBar = {
@@ -35,7 +35,7 @@ fun ArticleDetailScreen(
                 title = { Text(stringResource(Res.string.article_label)) },
                 navigationIcon = {
                     TextButton(onClick = onBack) {
-                        Text("← " + stringResource(Res.string.back_button))
+                        Text(stringResource(Res.string.back_button))
                     }
                 }
             )
@@ -85,12 +85,12 @@ fun ArticleDetailScreen(
                         )
                     }
 
-                    if (article.journal.isNotEmpty()) {
+                    if (state.relatedDoi != null) {
                         Button(
-                            onClick = { onRelatedArticleClick(article) },
+                            onClick = { onRelatedArticleClick(state.relatedDoi) },
                             modifier = Modifier.padding(top = 24.dp)
                         ) {
-                            Text("Связанные записи (${article.journal})")
+                            Text(stringResource(Res.string.related_articles, article.journal))
                         }
                     }
                 }

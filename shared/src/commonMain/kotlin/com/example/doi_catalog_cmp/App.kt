@@ -15,6 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.intl.Locale
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -43,7 +44,7 @@ fun App() {
 
     val backStack = rememberNavBackStack(config, ArticleListRoute)
     var isDarkTheme by remember { mutableStateOf(false) }
-    var currentLanguage by remember { mutableStateOf("ru") }
+    var currentLanguage by remember { mutableStateOf(if (Locale.current.language == "ru") "ru" else "en") }
 
     val repository = remember {MockArticleRepository()}
 
@@ -96,10 +97,8 @@ fun App() {
                             ArticleDetailScreen(
                                 state = state,
                                 onBack = { backStack.removeLastOrNull() },
-                                onRelatedArticleClick = { article ->
-                                    viewModel.onRelatedArticleClicked(article) { newDoi ->
-                                        backStack.add(ArticleDetailRoute(newDoi))
-                                    }
+                                onRelatedArticleClick = { doi ->
+                                    backStack.add(ArticleDetailRoute(doi))
                                 }
                             )
                         }

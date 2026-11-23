@@ -6,4 +6,5 @@
     <string name="article_not_found">Статья не найдена</string>
     <string name="back_button">Назад</string>
     <string name="article_label">Статья</string>
+    <string name="related_articles">Связанные записи (%1$s)</string>
 </resources>

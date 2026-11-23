@@ -6,4 +6,5 @@
     <string name="article_not_found">Article not found</string>
     <string name="back_button">Back</string>
     <string name="article_label">Article</string>
+    <string name="related_articles">Related articles (%1$s)</string>
 </resources>

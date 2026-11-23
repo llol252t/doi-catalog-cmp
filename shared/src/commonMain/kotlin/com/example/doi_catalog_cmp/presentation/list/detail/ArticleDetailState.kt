@@ -4,6 +4,6 @@ import com.example.doi_catalog_cmp.domain.ArticleModel
 
 sealed interface ArticleDetailState {
     data object Loading : ArticleDetailState
-    data class Success(val article: ArticleModel) : ArticleDetailState
+    data class Success(val article: ArticleModel, val relatedDoi: String?) : ArticleDetailState
     data object NotFound : ArticleDetailState
 }
