@@ -12,7 +12,12 @@ dependencies {
     implementation(compose.desktop.currentOs)
     implementation(libs.kotlinx.coroutinesSwing)
 
+    implementation(libs.compose.components.resources)
     implementation(libs.compose.uiToolingPreview)
+}
+
+compose.resources {
+    packageOfResClass = "com.example.doi_catalog_cmp.desktop.resources"
 }
 
 compose.desktop {
