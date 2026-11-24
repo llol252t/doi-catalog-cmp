@@ -7,3 +7,5 @@ import io.ktor.client.engine.darwin.Darwin
 internal actual fun createPlatformHttpClient(
     configure: HttpClientConfig<*>.() -> Unit
 ): HttpClient = HttpClient(Darwin) { configure(this) }
+
+internal actual fun openArticleRepository(): ArticleRepositorySession = openLocalArticleRepository()

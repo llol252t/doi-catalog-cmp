@@ -23,7 +23,11 @@ kotlin {
 
 
     js {
-        browser()
+        browser {
+            commonWebpackConfig {
+                outputFileName = "crossref-worker.js"
+            }
+        }
         binaries.executable()
     }
 

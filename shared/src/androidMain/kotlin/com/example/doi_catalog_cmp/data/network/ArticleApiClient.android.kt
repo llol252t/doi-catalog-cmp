@@ -7,3 +7,5 @@ import io.ktor.client.engine.okhttp.OkHttp
 internal actual fun createPlatformHttpClient(
     configure: HttpClientConfig<*>.() -> Unit
 ): HttpClient = HttpClient(OkHttp) { configure(this) }
+
+internal actual fun openArticleRepository(): ArticleRepositorySession = openLocalArticleRepository()

@@ -26,3 +26,14 @@ kotlin {
         }
     }
 }
+
+val workerBundle = project(":shared").layout.buildDirectory.dir("kotlin-webpack/js/productionExecutable")
+tasks.withType<ProcessResources>().matching {
+    it.name == "jsProcessResources" || it.name == "wasmJsProcessResources"
+}.configureEach {
+    dependsOn(":shared:jsBrowserProductionWebpack")
+    from(workerBundle) {
+        into("article-worker")
+        include("*.js")
+    }
+}
