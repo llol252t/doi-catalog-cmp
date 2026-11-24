@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -20,7 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.example.doi_catalog_cmp.data.MockArticleRepository
+import com.example.doi_catalog_cmp.data.network.openArticleRepository
 import com.example.doi_catalog_cmp.navigation.ArticleDetailRoute
 import com.example.doi_catalog_cmp.navigation.ArticleListRoute
 import com.example.doi_catalog_cmp.presentation.list.detail.ArticleDetailScreen
@@ -46,7 +47,11 @@ fun App() {
     var isDarkTheme by remember { mutableStateOf(false) }
     var currentLanguage by remember { mutableStateOf(if (Locale.current.language == "ru") "ru" else "en") }
 
-    val repository = remember {MockArticleRepository()}
+    val session = remember { openArticleRepository() }
+    val repository = session.repository
+    DisposableEffect(session) {
+        onDispose(session.close)
+    }
 
     key(currentLanguage) {
         AppTheme(darkTheme = isDarkTheme) {
