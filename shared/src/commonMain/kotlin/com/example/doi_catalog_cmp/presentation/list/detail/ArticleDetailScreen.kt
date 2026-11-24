@@ -72,11 +72,17 @@ fun ArticleDetailScreen(
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
-                    Text(
-                        text = "${article.year} · ${article.journal}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    val publication = listOfNotNull(
+                        article.year.takeIf { it > 0 }?.toString(),
+                        article.journal.takeIf { it.isNotBlank() }
+                    ).joinToString(" · ")
+                    if (publication.isNotEmpty()) {
+                        Text(
+                            text = publication,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                     Text(
                         text = article.type,
                         style = MaterialTheme.typography.labelSmall

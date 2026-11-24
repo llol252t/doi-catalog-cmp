@@ -38,19 +38,23 @@ fun ArticleCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
                 )
             }
-             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)){
-                 Text(
-                     text = article.year.toString(),
-                     style = MaterialTheme.typography.labelMedium,
-                     color = MaterialTheme.colorScheme.primary
-                 )
-                 Text(
-                     text = "· ${article.journal}",
-                     style = MaterialTheme.typography.labelMedium,
-                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
-                     maxLines = 1
-                 )
-             }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                if (article.year > 0) {
+                    Text(
+                        text = article.year.toString(),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
+                if (article.journal.isNotBlank()) {
+                    Text(
+                        text = if (article.year > 0) "· ${article.journal}" else article.journal,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                        maxLines = 1
+                    )
+                }
+            }
         }
     }
 }
