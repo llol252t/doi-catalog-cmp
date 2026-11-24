@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.doi_catalog_cmp.domain.ArticleRepository
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,46 +15,44 @@ class ArticleListViewModel(
     private val repository: ArticleRepository
 ) : ViewModel() {
 
-    private var searchJob: Job? = null
+    private var currentQuery = ""
+    private var requestJob: Job? = null
     private val _state = MutableStateFlow<ArticleListState>(ArticleListState.Loading)
     val state: StateFlow<ArticleListState> = _state.asStateFlow()
 
     init {
-        loadArticles()
+        load("")
     }
 
+    fun search(query: String) = load(query)
 
+    fun retry() = load(currentQuery)
 
-    fun loadArticles() {
-        viewModelScope.launch {
+    private fun load(query: String) {
+        currentQuery = query
+        requestJob?.cancel()
+
+        requestJob = viewModelScope.launch {
             _state.value = ArticleListState.Loading
-            try {
-                val articles = repository.getArticles()
-                if (articles.isEmpty()) {
-                    _state.value = ArticleListState.NotFound
-                } else {
-                    _state.value = ArticleListState.Success(articles)
-                }
-            } catch (e: Exception) {
-                _state.value = ArticleListState.NotFound
-            }
-        }
-    }
 
-    fun search(query: String) {
-        searchJob?.cancel()
-        searchJob = viewModelScope.launch {
             try {
-                val articles = repository.searchArticles(query)
-                if (articles.isEmpty()) {
-                    _state.value = ArticleListState.NotFound
+                val articles = if (query.isBlank()) {
+                    repository.getArticles()
                 } else {
-                    _state.value = ArticleListState.Success(articles, query)
+                    repository.searchArticles(query)
+                }
+
+                ensureActive()
+                _state.value = if (articles.isEmpty()) {
+                    ArticleListState.NotFound
+                } else {
+                    ArticleListState.Success(articles, query)
                 }
             } catch (e: CancellationException) {
-                    throw e
+                throw e
             } catch (e: Exception) {
-                _state.value = ArticleListState.NotFound
+                ensureActive()
+                _state.value = ArticleListState.Error
             }
         }
     }

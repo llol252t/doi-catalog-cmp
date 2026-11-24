@@ -21,12 +21,15 @@ import doi_catalog_cmp.shared.generated.resources.article_label
 import doi_catalog_cmp.shared.generated.resources.article_not_found
 import doi_catalog_cmp.shared.generated.resources.back_button
 import doi_catalog_cmp.shared.generated.resources.related_articles
+import doi_catalog_cmp.shared.generated.resources.load_error
+import doi_catalog_cmp.shared.generated.resources.retry
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ArticleDetailScreen(
     state: ArticleDetailState,
     onBack: () -> Unit,
+    onRetry: () -> Unit,
     onRelatedArticleClick: (String) -> Unit
 ) {
     Scaffold(
@@ -69,11 +72,17 @@ fun ArticleDetailScreen(
                             style = MaterialTheme.typography.bodyMedium
                         )
                     }
-                    Text(
-                        text = "${article.year} · ${article.journal}",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary
-                    )
+                    val publication = listOfNotNull(
+                        article.year.takeIf { it > 0 }?.toString(),
+                        article.journal.takeIf { it.isNotBlank() }
+                    ).joinToString(" · ")
+                    if (publication.isNotEmpty()) {
+                        Text(
+                            text = publication,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
                     Text(
                         text = article.type,
                         style = MaterialTheme.typography.labelSmall
@@ -92,6 +101,18 @@ fun ArticleDetailScreen(
                         ) {
                             Text(stringResource(Res.string.related_articles, article.journal))
                         }
+                    }
+                }
+            }
+            ArticleDetailState.Error -> {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(paddingValues),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(stringResource(Res.string.load_error))
+                    Button(onClick = onRetry) {
+                        Text(stringResource(Res.string.retry))
                     }
                 }
             }

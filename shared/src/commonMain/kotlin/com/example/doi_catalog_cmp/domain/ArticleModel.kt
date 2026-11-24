@@ -1,5 +1,8 @@
 package com.example.doi_catalog_cmp.domain
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ArticleModel(
     val doi: String,
     val title: String,

@@ -9,4 +9,5 @@ sealed interface ArticleListState{
         val query : String = ""
     ) : ArticleListState
     data object NotFound : ArticleListState
+    data object Error : ArticleListState
 }
