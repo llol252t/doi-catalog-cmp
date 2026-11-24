@@ -19,6 +19,8 @@ import doi_catalog_cmp.shared.generated.resources.Res
 import doi_catalog_cmp.shared.generated.resources.app_title
 import doi_catalog_cmp.shared.generated.resources.nothing_found
 import doi_catalog_cmp.shared.generated.resources.search_hint
+import doi_catalog_cmp.shared.generated.resources.load_error
+import doi_catalog_cmp.shared.generated.resources.retry
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -26,6 +28,7 @@ fun ArticleListScreen(
     state: ArticleListState,
     onArticleClick: (ArticleModel) -> Unit,
     onSearch: (String) -> Unit,
+    onRetry: () -> Unit,
     onToggleTheme: () -> Unit,
     onToggleLn: () -> Unit,
     isRusLn: Boolean,
@@ -90,6 +93,18 @@ fun ArticleListScreen(
                                 article = article,
                                 onClick = { onArticleClick(article) }
                             )
+                        }
+                    }
+                }
+                ArticleListState.Error -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(stringResource(Res.string.load_error))
+                        Button(onClick = onRetry) {
+                            Text(stringResource(Res.string.retry))
                         }
                     }
                 }

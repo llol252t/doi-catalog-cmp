@@ -74,6 +74,7 @@ fun App() {
                                     backStack.add(ArticleDetailRoute(article.doi))
                                 },
                                 onSearch = viewModel::search,
+                                onRetry = viewModel::retry,
                                 onToggleTheme = { isDarkTheme = !isDarkTheme },
                                 onToggleLn = {
                                     val newLang = if (currentLanguage == "ru") "en" else "ru"
@@ -97,6 +98,7 @@ fun App() {
                             ArticleDetailScreen(
                                 state = state,
                                 onBack = { backStack.removeLastOrNull() },
+                                onRetry = { viewModel.loadArticle(route.doi) },
                                 onRelatedArticleClick = { doi ->
                                     backStack.add(ArticleDetailRoute(doi))
                                 }

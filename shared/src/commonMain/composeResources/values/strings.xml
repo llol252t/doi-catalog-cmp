@@ -7,4 +7,6 @@
     <string name="back_button">Back</string>
     <string name="article_label">Article</string>
     <string name="related_articles">Related articles (%1$s)</string>
+    <string name="load_error">Could not load data</string>
+    <string name="retry">Retry</string>
 </resources>

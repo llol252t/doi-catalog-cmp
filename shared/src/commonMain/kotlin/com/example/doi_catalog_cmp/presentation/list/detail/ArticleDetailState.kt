@@ -6,4 +6,5 @@ sealed interface ArticleDetailState {
     data object Loading : ArticleDetailState
     data class Success(val article: ArticleModel, val relatedDoi: String?) : ArticleDetailState
     data object NotFound : ArticleDetailState
+    data object Error : ArticleDetailState
 }

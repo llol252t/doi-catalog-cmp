@@ -7,4 +7,6 @@
     <string name="back_button">Назад</string>
     <string name="article_label">Статья</string>
     <string name="related_articles">Связанные записи (%1$s)</string>
+    <string name="load_error">Не удалось загрузить данные</string>
+    <string name="retry">Повторить</string>
 </resources>

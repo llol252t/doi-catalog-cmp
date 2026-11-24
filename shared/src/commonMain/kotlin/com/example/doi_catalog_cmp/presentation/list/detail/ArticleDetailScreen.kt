@@ -21,12 +21,15 @@ import doi_catalog_cmp.shared.generated.resources.article_label
 import doi_catalog_cmp.shared.generated.resources.article_not_found
 import doi_catalog_cmp.shared.generated.resources.back_button
 import doi_catalog_cmp.shared.generated.resources.related_articles
+import doi_catalog_cmp.shared.generated.resources.load_error
+import doi_catalog_cmp.shared.generated.resources.retry
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun ArticleDetailScreen(
     state: ArticleDetailState,
     onBack: () -> Unit,
+    onRetry: () -> Unit,
     onRelatedArticleClick: (String) -> Unit
 ) {
     Scaffold(
@@ -92,6 +95,18 @@ fun ArticleDetailScreen(
                         ) {
                             Text(stringResource(Res.string.related_articles, article.journal))
                         }
+                    }
+                }
+            }
+            ArticleDetailState.Error -> {
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(paddingValues),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(stringResource(Res.string.load_error))
+                    Button(onClick = onRetry) {
+                        Text(stringResource(Res.string.retry))
                     }
                 }
             }
